@@ -1,0 +1,2 @@
+rootProject.name='ViewDialog'
+include ':app'
