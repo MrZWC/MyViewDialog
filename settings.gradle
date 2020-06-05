@@ -1,2 +1,3 @@
-rootProject.name='ViewDialog'
+rootProject.name='MyViewDialog'
 include ':app'
+include ':viewdialog'
