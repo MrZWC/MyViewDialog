@@ -14,8 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 
-import timber.log.Timber;
-
 /**
  * Created by Android Studio.
  * User: zuoweichen
@@ -37,7 +35,7 @@ public class ViewDialog extends ViewBackLayer {
         mActivity = activity;
         mContentParentView = contentParentView;
         decorView.setOnClickListener(v -> {
-            Timber.v("decor view onClick");
+            BackStackLog.v("decor view onClick");
             onBackPressed();
         });
     }
@@ -80,17 +78,17 @@ public class ViewDialog extends ViewBackLayer {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     if (mCanceled) {
-                        Timber.v("ViewDialog content view hide anim end with cancel");
+                        BackStackLog.v("ViewDialog content view hide anim end with cancel");
                         return;
                     }
 
                     if (isShown()) {
-                        Timber.e("ViewDialog is shown after content view hide anim end");
+                        BackStackLog.e("ViewDialog is shown after content view hide anim end");
                         return;
                     }
 
                     if (mContentView == null) {
-                        Timber.e("ViewDialog content view is null after content view hide anim end");
+                        BackStackLog.e("ViewDialog content view is null after content view hide anim end");
                         return;
                     }
 
@@ -107,7 +105,7 @@ public class ViewDialog extends ViewBackLayer {
     @Override
     public void show() {
         if (isShown()) {
-            Timber.e("already shown");
+            BackStackLog.e("already shown");
             return;
         }
 
@@ -124,7 +122,7 @@ public class ViewDialog extends ViewBackLayer {
     @Override
     public void hide(boolean cancel) {
         if (!isShown()) {
-            Timber.e("not shown");
+            BackStackLog.e("not shown");
             return;
         }
 

@@ -7,9 +7,8 @@ import android.view.ViewParent;
 import androidx.annotation.IdRes;
 import androidx.core.view.ViewCompat;
 
-import com.idonans.lang.thread.Threads;
 
-import timber.log.Timber;
+import io.github.idonans.core.thread.Threads;
 
 /**
  * Created by Android Studio.
@@ -85,7 +84,7 @@ public class ViewBackLayer implements BackStack.BackLayer {
 
     protected void showInternal(boolean attach) {
         if (mShown) {
-            Timber.e("already shown");
+            BackStackLog.e("already shown");
             return;
         }
 
@@ -105,7 +104,7 @@ public class ViewBackLayer implements BackStack.BackLayer {
 
     protected void hideInternal(boolean cancel, boolean detach) {
         if (!mShown) {
-            Timber.e("not shown");
+            BackStackLog.e("not shown");
             return;
         }
 
@@ -121,12 +120,12 @@ public class ViewBackLayer implements BackStack.BackLayer {
 
     protected void attachViewToParent() {
         if (mParentView == null) {
-            Timber.e("parent view is null");
+            BackStackLog.e("parent view is null");
             return;
         }
 
         if (mDecorView.getParent() != null) {
-            Timber.e("decor view's parent is not null %s", mDecorView.getParent());
+            BackStackLog.e("decor view's parent is not null %s", mDecorView.getParent());
             return;
         }
 
@@ -143,12 +142,12 @@ public class ViewBackLayer implements BackStack.BackLayer {
     protected void detachViewFromParent() {
         final ViewParent parent = mDecorView.getParent();
         if (!(parent instanceof ViewGroup)) {
-            Timber.e("decor view's parent is not instance of ViewGroup %s", parent);
+            BackStackLog.e("decor view's parent is not instance of ViewGroup %s", parent);
             return;
         }
 
         if (parent != mParentView) {
-            Timber.e("decor view's parent changed to another, require:%s, found:%s", mParentView, parent);
+            BackStackLog.e("decor view's parent changed to another, require:%s, found:%s", mParentView, parent);
             return;
         }
         //线程安全

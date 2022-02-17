@@ -1,22 +1,21 @@
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.android.library'
-
+apply from: rootProject.file('new_mvn_push.gradle')
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdk 31
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdk 21
+        targetSdk 31
         versionCode 1
-        versionName "1.0"
-
+        versionName "2.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+        buildConfigField("String", "LIB_NAME", "\"Backstack\"")
+        buildConfigField("int", "LIB_VERSION_CODE", "$versionCode")
+        buildConfigField("String", "LIB_VERSION_NAME", "\"$versionName\"")
     }
 
     buildTypes {
@@ -32,16 +31,16 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "com.idonans.lang:lang:0.1.7"
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation "io.github.idonans.lang:lang:2.0.11"
     implementation('com.google.guava:guava:27.0.1-android') {
         exclude module: 'failureaccess'
     }
 }
-
+/*
 def siteUrl = 'https://github.com/MrZWC/ViewDialog'   // 项目的主页
 def gitUrl = 'https://github.com/MrZWC/ViewDialog.git'   // Git仓库的url
 Properties properties = new Properties()
@@ -130,4 +129,4 @@ javadoc {
         version true
         links "http://docs.oracle.com/javase/7/docs/api"
     }
-}
+}*/

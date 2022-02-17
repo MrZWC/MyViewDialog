@@ -1,0 +1,124 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+def PUBLISH_GROUP_ID = 'io.github.MrZWC' //这里可以不是直接申请时候的groupId只要开头是就可以
+
+def PUBLISH_ARTIFACT_ID = "viewdialog"
+
+def PUBLISH_VERSION = android.defaultConfig.versionName //这个是直接获取的库gradle里配置好的版本号，不用到处修改版本号，只需要维护一份就可以。
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+signing {
+    sign publishing.publications
+}
+
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    println "Found secret props file, loading props"
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file, loading env vars"
+}
+afterEvaluate{
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // The coordinates of the library, being set from variables that
+                // we'll set up in a moment
+                groupId PUBLISH_GROUP_ID
+                artifactId PUBLISH_ARTIFACT_ID
+                version="2.0.0"
+
+                // Two artifacts, the `aar` and the sources
+                from components.release
+                artifact generateSourcesJar
+
+
+                // Self-explanatory metadata for the most part
+                pom {
+                    name = PUBLISH_ARTIFACT_ID
+                    description = '一个小小的view'
+                    // If your project has a dedicated site, use its URL here
+                    url = 'https://github.com/MrZWC/MyViewDialog'
+                    licenses {
+                        license {
+                            //协议类型，一般默认Apache License2.0的话不用改：
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'zuoweichen'
+                            name = 'zuoweichen'
+                            email = '675196884@qq.com'
+                        }
+                    }
+                    // Version control info, if you're using GitHub, follow the format as seen here
+                    scm {
+                        //修改成你的Git地址：
+                        connection = 'scm:https://github.com/MrZWC/MyViewDialog.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:MrZWC/MyViewDialog.git'
+                        //分支地址：
+                        url = 'https://github.com/MrZWC/MyViewDialog'
+                    }
+                    // A slightly hacky fix so that your POM will include any transitive dependencies
+                    // that your library builds upon
+                   /* withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        configurations.implementation.allDependencies.each {
+                            // 避免出现空节点或 artifactId=unspecified 的节点
+                            if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                                println it.toString()
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+                                dependencyNode.appendNode('scope', 'implementation')
+                            }
+                        }
+                    }*/
+                }
+            }
+        }
+        repositories {
+            // The repository to publish to, Sonatype/MavenCentral
+            maven {
+                // This is an arbitrary name, you may also use "mavencentral" or
+                // any other name that's descriptive for you
+                name = "viewdialog"
+
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                // You only need this if you want to publish snapshots, otherwise just set the URL
+                // to the release repo directly
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                //allowInsecureProtocol(true)
+                // The username and password we've fetched earlier
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+}
