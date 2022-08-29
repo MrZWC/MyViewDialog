@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = "1.6.10"
+        kotlin_version = "1.7.10"
         appcompat = "1.2.0"
         dokka_version = '1.4.10.2'
     }
@@ -17,6 +17,9 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version" //新添加的这一classpath
+    }
+    repositories {
+        mavenCentral()
     }
 }
 plugins {
