@@ -46,7 +46,7 @@ afterEvaluate{
                 // we'll set up in a moment
                 groupId PUBLISH_GROUP_ID
                 artifactId PUBLISH_ARTIFACT_ID
-                version="2.0.0"
+                version="2.0.1"
 
                 // Two artifacts, the `aar` and the sources
                 from components.release

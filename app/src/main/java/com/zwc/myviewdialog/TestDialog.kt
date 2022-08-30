@@ -3,6 +3,7 @@ package com.zwc.myviewdialog
 import android.app.Activity
 import android.view.ViewGroup
 import android.view.Window
+import com.zwc.myviewdialog.databinding.DialogTestLayoutBinding
 import com.zwc.viewdialog.ViewDialog
 
 /**
@@ -17,10 +18,12 @@ class TestDialog {
 
     constructor(activity: Activity) {
         this.mActivity = activity
+        val viewGroup = activity.findViewById(Window.ID_ANDROID_CONTENT) as ViewGroup
+        val binding = DialogTestLayoutBinding.inflate(activity.layoutInflater, viewGroup, false)
         mViewDialog = ViewDialog.Builder(activity)
-            .setParentView(activity.findViewById(Window.ID_ANDROID_CONTENT) as ViewGroup)
+            .setParentView(viewGroup)
             .setCancelable(true)
-            .setContentView(R.layout.dialog_test_layout)
+            .setContentView(binding.root)
             .dimBackground(true)
             .create()
     }

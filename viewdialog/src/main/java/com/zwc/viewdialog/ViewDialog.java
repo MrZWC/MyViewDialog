@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.AnimRes;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
@@ -162,7 +163,7 @@ public class ViewDialog extends ViewBackLayer {
         private OnRemoveFromParentListener mOnRemoveFromParentListener;
 
         private OnBackPressedListener mOnBackPressedListener;
-
+        private View mContentView;
         @LayoutRes
         private int mContentViewLayoutRes;
         @AnimRes
@@ -191,6 +192,11 @@ public class ViewDialog extends ViewBackLayer {
 
         public Builder setContentView(@LayoutRes int layoutRes) {
             mContentViewLayoutRes = layoutRes;
+            return this;
+        }
+
+        public Builder setContentView(@NonNull View contentView) {
+            mContentView = contentView;
             return this;
         }
 
@@ -257,8 +263,12 @@ public class ViewDialog extends ViewBackLayer {
             Preconditions.checkArgument(contentParentView != null, "content parent view not found,\ndecor view layout res must define one ViewGroup with id R.id.content_parent");
 
             View contentView = null;
-            if (mContentViewLayoutRes != 0) {
-                contentView = mActivity.getLayoutInflater().inflate(mContentViewLayoutRes, contentParentView, false);
+            if (mContentView != null) {
+                contentView = mContentView;
+            } else {
+                if (mContentViewLayoutRes != 0) {
+                    contentView = mActivity.getLayoutInflater().inflate(mContentViewLayoutRes, contentParentView, false);
+                }
             }
 
             ViewDialog viewDialog = new ViewDialog(mActivity, decorView, mParentView, contentParentView);
