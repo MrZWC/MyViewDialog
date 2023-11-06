@@ -1,14 +1,13 @@
 package com.zwc.viewdialog;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.annotation.IdRes;
 import androidx.core.view.ViewCompat;
-
-
-import io.github.idonans.core.thread.Threads;
 
 /**
  * Created by Android Studio.
@@ -25,7 +24,7 @@ public class ViewBackLayer implements BackStack.BackLayer {
     protected boolean mCancelable = true;
     protected boolean mRequestSystemInsets = true;
     protected boolean mShown;
-
+    private static final Handler sHandlerUi = new Handler(Looper.getMainLooper());
     public ViewBackLayer(WindowBackStackDispatcher dispatcher, View decorView, ViewGroup parentView) {
         mDispatcher = dispatcher;
         mDecorView = decorView;
@@ -151,7 +150,7 @@ public class ViewBackLayer implements BackStack.BackLayer {
             return;
         }
         //线程安全
-        Threads.postUi(new Runnable() {
+        sHandlerUi.post(new Runnable() {
             @Override
             public void run() {
                 ((ViewGroup) parent).removeView(mDecorView);
@@ -163,7 +162,6 @@ public class ViewBackLayer implements BackStack.BackLayer {
                 }
             }
         });
-
     }
 
     public interface OnHideListener {

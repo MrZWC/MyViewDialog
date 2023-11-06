@@ -3,13 +3,24 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/public' } //central、jcenter
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/releases/' }
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/public' } //central、jcenter
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/releases/' }
     }
 }
 
